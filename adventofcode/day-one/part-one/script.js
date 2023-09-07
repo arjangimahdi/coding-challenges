@@ -510,6 +510,8 @@ const calories = [
     [2390, 4112, 4584, 1655, 3641, 1485, 4486, 3442, 6506, 2663, 3253, 2123, 4825],
 ];
 
+// Part One
+
 let highestCalory = 0;
 let totalCaloriesOfElf = 0;
 
@@ -521,3 +523,15 @@ for (let i = 0; i < calories.length; i++) {
 }
 
 console.log(highestCalory);
+
+// Part Two
+
+const totals = calories.map((calory) => {
+  return calory.reduce((a,b) => {
+    return a + b
+  }, 0);
+})
+
+const highestCaloryInTopThree = totals.sort((a,b) => a - b ).slice(-3).reduce((a,b) => a + b)
+
+console.log(highestCaloryInTopThree);
