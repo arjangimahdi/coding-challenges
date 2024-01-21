@@ -1000,11 +1000,62 @@ const data = [
     "fbbdeightzzsdffh8jbjzxkclj",
     "3nine6five1",
 ];
+const numbers = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+
+function removeDuplicates(arr) {
+    jsonObject = arr.map(JSON.stringify);
+    uniqueSet = new Set(jsonObject);
+    uniqueArray = Array.from(uniqueSet).map(JSON.parse);
+ 
+    return uniqueArray;
+}
 
 let sum = 0;
-for (const element of data) {
-    const items = element.split("").filter((word) => word.match(/\d+/g));
-
+function sumCalibrations(items) {
     const calibration = items[0] + items[items.length - 1];
     sum += +calibration
 }
+
+for (const element of data) {
+    const arr = [];
+    const calibrationArr = [];
+
+    const firstNumberIndex = element.split("").findIndex((word) => word.match(/\d+/g));
+    const lastNumberIndex = element.split("").findLastIndex((word) => word.match(/\d+/g));
+
+    arr.push({ key: +element[firstNumberIndex], index: firstNumberIndex });
+    arr.push({ key: +element[lastNumberIndex], index: lastNumberIndex });
+
+    for (const number of numbers) {
+        const lastIndex = element.lastIndexOf(number);
+        const firstIndex = element.indexOf(number);
+        if (firstIndex != -1 && lastIndex != -1) {
+            arr.push({ key: number, index: firstIndex });
+            arr.push({ key: number, index: lastIndex });
+        }
+    }
+
+    arr.push(...removeDuplicates(arr));
+
+    const firstItem = arr.reduce((previuose, current) => {
+        return previuose.index < current.index ? previuose : current;
+    });
+    const lastItem = arr.reduce((previuose, current) => {
+        return previuose.index < current.index ? current : previuose;
+    });
+
+    for (const item of [firstItem, lastItem]) {
+        if (typeof item.key == 'string') {
+            calibrationArr.push(numbers.findIndex(_item => _item == item.key).toString());
+        }
+        if (typeof item.key == 'number') {
+            calibrationArr.push(item.key.toString())
+        }
+    }
+
+    sumCalibrations(calibrationArr)
+    // console.log('lastNumberIndex : ', lastNumberIndex);
+    // console.log('lastWordIndex : ', lastWordIndex);
+}
+
+console.log(sum);
